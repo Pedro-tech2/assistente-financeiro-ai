@@ -47,6 +47,44 @@ def chat(request: PerguntaRequest):
     except Exception as erro:
         raise HTTPException(status_code=502, detail="Não foi possível obter resposta da IA no momento. Tente novamente mais tarde.")
 
+@app.post("/analise")
+def analise(request: AnaliseRequest):
+    """
+    Endpoint que recebe os dados financeiros, retorna a análise completa e salva o resultado do histórico.
+    """
+    try:
+        resultado = analisar_financas(
+        salario=request.salario,
+        gastos_fixos=request.gastos_fixos,
+        dividas=request.dividas
+        )
+        salvar_analise(resultado)
+        return resultado
+    except ValueError as erro:
+        raise HTTPException(status_code=400, detail=str(erro))
+    
+@app.post("/economia-potencial")
+def economia_potencial(request: EconomiaRequest):
+    """
+    Endpoint que calcula a economia potencial em um período de um, dois e cinco anos.
+    """
+    try:
+        projecao = calcular_economia_potencial(request.saldo)
+        return projecao
+    except ValueError as erro:
+        raise HTTPException(status_code=400, detail=str(erro))
+    
+@app.post("/quitacao-divida")
+def quitacao_divida(request: QuitacaoRequest):
+    """
+    Endpoint que simula em quantos meses uma dívida poderá ser paga.
+    """
+    try:
+        resultado = simular_quitacao_divida(request.dividas, request.pagamento_mensal)
+        return resultado
+    except ValueError as erro:
+        raise HTTPException(status_code=400, detail=str(erro))
+    
 @app.post("/reserva-emergencia")
 def reserva_emergencia(request: ReservaRequest):
     """
@@ -69,29 +107,6 @@ def meta(request: MetaRequest):
     except ValueError as erro:
         raise HTTPException(status_code=400, detail=str(erro))
     
-@app.post("/quitacao-divida")
-def quitacao_divida(request: QuitacaoRequest):
-    """
-    Endpoint que simula em quantos meses uma dívida poderá ser paga.
-    """
-    try:
-        resultado = simular_quitacao_divida(request.dividas, request.pagamento_mensal)
-        return resultado
-    except ValueError as erro:
-        raise HTTPException(status_code=400, detail=str(erro))
-
-    
-@app.post("/economia-potencial")
-def economia_potencial(request: EconomiaRequest):
-    """
-    Endpoint que calcula a economia potencial em um período de um, dois e cinco anos.
-    """
-    try:
-        projecao = calcular_economia_potencial(request.saldo)
-        return projecao
-    except ValueError as erro:
-        raise HTTPException(status_code=400, detail=str(erro))
-    
 @app.post("/analise-despesas")
 def analise_despesas(request: DespesasRequest):
     """
@@ -102,19 +117,6 @@ def analise_despesas(request: DespesasRequest):
         return resultado
     except ValueError as erro:
         raise HTTPException(status_code=400, detail=str(erro))
-
-@app.post("/analise")
-def analise(request: AnaliseRequest):
-    """
-    Endpoint que recebe os dados financeiros, retorna a análise completa e salva o resultado do histórico.
-    """
-    resultado = analisar_financas(
-        salario=request.salario,
-        gastos_fixos=request.gastos_fixos,
-        dividas=request.dividas
-    )
-    salvar_analise(resultado)
-    return resultado
 
 @app.get("/historico")
 def historico():

@@ -56,12 +56,12 @@ assistente-financeiro-ai/
 | Método | Rota | O que faz |
 |---|---|---|
 | POST | `/chat` | Pergunta aberta pra IA sobre finanças |
+| POST | `/analise` | Faz a análise financeira completa e salva no histórico |
+| POST | `/economia-potencial` | Projeta o saldo em 1, 2 e 5 anos |
+| POST | `/quitacao-divida` | Simula o pagamento de uma dívida mês a mês |
 | POST | `/reserva-emergencia` | Calcula a reserva de emergência |
 | POST | `/meta` | Calcula em quantos meses uma meta é atingida |
-| POST | `/quitacao-divida` | Simula o pagamento de uma dívida mês a mês |
-| POST | `/economia-potencial` | Projeta o saldo em 1, 2 e 5 anos |
 | POST | `/analise-despesas` | Analisa uma lista de despesas |
-| POST | `/analise` | Faz a análise financeira completa e salva no histórico |
 | GET  | `/historico` | Mostra as análises já salvas |
 
 ## Como rodar na sua máquina

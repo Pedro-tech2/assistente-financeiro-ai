@@ -1,7 +1,13 @@
 def calcular_total_gastos(gastos_fixos: float, dividas: float) -> float:
+    if gastos_fixos < 0 or dividas < 0:
+        raise ValueError("Gastos fixos e dívidas não podem ser menores que zero.")
     return gastos_fixos + dividas
 
 def calcular_saldo(salario: float, total_gastos: float) -> float:
+    if salario <= 0:
+        raise ValueError("Salário deve ser maior que zero.")
+    if total_gastos < 0:
+        raise ValueError("Total de gastos não pode ser negativo.")
     return salario - total_gastos
 
 def calcular_porcentagem_gastos(salario: float, total_gastos: float) -> float:
@@ -66,7 +72,7 @@ def analisar_despesas(despesas: list[float]) ->dict:
     if not despesas:
         raise ValueError("A lista de despesas não pode estar vazia.")
     for despesa in despesas:
-        if despesas <= 0:
+        if despesa <= 0:
             raise ValueError("Todas as despesas devem ser maiores que zero")
     
     total = sum(despesas)
