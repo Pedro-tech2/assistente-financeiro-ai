@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quitação de Dívidas</title>
+        <!--Aqui fica o link de estilos da página-->
+        <link rel="stylesheet" href="css/estilo.css">
+    </head>
+    <body>
+        <header>
+            <!--Título do cabeçalho-->
+            <h1 class="main-title">Quitação de Dívidas</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="container-activity">
+                <section class="atividade">
+                    <!--Formulário que recebe dados de dívidas-->
+                    <form action="" method="post">
+                        <fieldset>
+                            <legend>Dados sobre Dívidas</legend>
+                            <div>
+                                <label for="dividas">Qual o valor da sua dívida?</label>
+                                <input type="number" id="dividas" name="dividas" step="0.01" min="0.01" placeholder="2000.00" aria-describedby="dividas-ajuda" required/>
+                                <!--Texto de suporte discreto-->
+                                <small id="dividas-ajuda">
+                                    Digite apenas números (ex.: 1500.50)
+                                </small>
+                            </div>
+                            <div>
+                                <label for="pagamento_mensal">Quanto você consegue pagar por mês?</label>
+                                <input type="number" id="pagamento_mensal" name="pagamento_mensal" step="0.01" min="0.01" placeholder="300.00" aria-describedby="pagamento-mensal-ajuda" required/>
+                                <!--Texto de suporte discreto-->
+                                <small id="pagamento-mensal-ajuda">
+                                    Digite apenas números (ex.: 1500.50)
+                                </small>
+                            </div>
+                            <button type="submit">Enviar</button>
+                        </fieldset>
+                        <div class="resultado" id="bloco-resultado-quitacao" aria-live="polite"></div>
+                    </form>
+                </section>
+            </div>
+            <div class="mensagem-erro" role="alert"></div>
+        </main>
+        <aside class="chat-ia" aria-labelledby="chat-titulo">
+            <h2 id="chat-titulo">Chat com IA</h2>
+            <p id="chat-ajuda">Em breve: o assistente responderá aqui.</p>
+            <label for="pergunta-chat">Sua pergunta:</label>
+            <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda"></textarea>
+            <button type="button">Enviar</button>
+            <div class="chat-resposta" aria-live="polite">A resposta aparecerá aqui.</div>
+        </aside>
+        <footer>Todos os direitos reservados</footer>
+    </body>
+</html>

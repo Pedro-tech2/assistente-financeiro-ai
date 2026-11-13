@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Análise Financeira</title>
+        <!--Aqui fica o link de estilos da página-->
+        <link rel="stylesheet" href="css/estilo.css">
+    </head>
+    <body>
+        <header>
+            <h1 class="main-title">Análise Financeira</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="container-activity">
+                <section class="atividade">
+                    <!--Formulário para entrada de dados de salário, gastos e dívidas-->
+                    <form action="" method="post">
+                        <fieldset>
+                            <legend>Dados Financeiros</legend>
+                            <div>
+                                <label for="salario">Digite o seu salário:</label>
+                                <input type="number" id="salario" name="salario" step="0.01" min="0.01" placeholder="1500.00" aria-describedby="salario-ajuda" required/>
+                                <!--Texto de suporte discreto-->
+                                <small id="salario-ajuda">
+                                    Digite apenas números (ex.: 1500.50)
+                                </small>
+                            </div>
+                            <div>
+                                <label for="gastos-fixos">Gastos fixos:</label>
+                                <input type="number" id="gastos-fixos" name="gastos_fixos" step="0.01" min="0" aria-describedby="gastos-fixos-ajuda" placeholder="820.00" required/>
+                                <!--Texto de suporte discreto-->
+                                <small id="gastos-fixos-ajuda">
+                                    Digite apenas números (ex.: 1500.50)
+                                </small>
+                            </div>
+                            <div>
+                                <label for="dividas">Dívidas:</label>
+                                <input type="number" id="dividas" name="dividas" step="0.01" min="0" placeholder="2500.00" aria-describedby="dividas-ajuda" required/>
+                                <!--Texto de suporte discreto-->
+                                <small id="dividas-ajuda">
+                                    Digite apenas números (ex.: 1500.50)
+                                </small>
+                            </div>
+                            <button type="submit">Enviar</button>
+                        </fieldset>
+                        <div class="resultado" id="bloco-diagnostico" aria-live="polite"></div>
+                    </form>
+                </section>
+                <div class="mensagem-erro" role="alert"></div>
+            </div>
+            <section class="historico" aria-labelledby="titulo-historico">
+                <h2 id="titulo-historico">Histórico</h2>
+                <p id="historico-vazio" role="status">Nenhuma análise salva ainda.</p>
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th scope="col">Total de gastos</th>
+                            <th scope="col">Saldo</th>
+                            <th scope="col">Percentual</th>
+                            <th scope="col">Diagnóstico</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historico-corpo"></tbody>
+                </table>
+            </section>
+        </main>
+        <aside class="chat-ia" aria-labelledby="chat-titulo">
+            <h2 id="chat-titulo">Chat com IA</h2>
+            <p id="chat-ajuda">Em breve: o assistente responderá aqui.</p>
+            <label for="pergunta-chat">Sua pergunta:</label>
+            <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda"></textarea>
+            <button type="button">Enviar</button>
+            <div class="chat-resposta" aria-live="polite">A resposta aparecerá aqui.</div>
+        </aside>
+        <footer>Todos os direitos reservados</footer>
+    </body>
+</html>

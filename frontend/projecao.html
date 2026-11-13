@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeção Financeira</title>
+    <!--Aqui fica o link de estilos da página-->
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+    <header>
+        <h1 class="main-title">Projeção Financeira</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!--Meta Financeira-->
+        <div class="container-activity">
+            <section class="atividade">
+                <h2>Sua Meta</h2>
+                <form action="" method="post">
+                    <fieldset>
+                        <legend>Meta Financeira</legend>
+                        <div>
+                            <label for="meta">Qual é a sua meta?</label>
+                            <input type="number" id="meta" name="meta" step="0.01" min="0.01" placeholder="5000.00" aria-describedby="meta-ajuda" required/>
+                            <!--Texto de suporte discreto-->
+                            <small id="meta-ajuda">
+                                Digite apenas números (ex.: 1500.50)
+                            </small>
+                        </div>
+                        <div>
+                            <label for="economia-mensal">Quanto você pode economizar por mês?</label>
+                            <input type="number" id="economia-mensal" name="economia_mensal" step="0.01" min="0.01" placeholder="200.00" aria-describedby="economia-ajuda" required/>
+                            <small id="economia-ajuda">
+                                Digite apenas números (ex.: 1500.50)
+                            </small>
+                        </div>
+                        <button type="submit">Enviar</button>
+                    </fieldset>
+                    <div class="resultado" id="bloco-resultado-meta" aria-live="polite"></div>
+                </form>
+            </section>
+        </div>
+        <div class="mensagem-erro" role="alert"></div>
+
+        <!--Reserva de Emergência-->
+        <div class="container-activity">
+            <section class="atividade">
+                <h2>Reserva de Emergência</h2>
+                <form action="" method="post">
+                    <fieldset>
+                        <legend>Reserva de Emergência</legend>
+                        <div>
+                            <label for="gastos-fixos">Quais são seus gastos fixos?</label>
+                            <input type="number" id="gastos-fixos" name="gastos_fixos" step="0.01" min="0.01" placeholder="800.00" aria-describedby="gastos-fixos-ajuda" required/>
+                            <small id="gastos-fixos-ajuda">
+                                Digite apenas números (ex.: 1500.50)
+                            </small>
+                        </div>
+                        <button type="submit">Enviar</button>
+                    </fieldset>
+                    <div class="resultado" id="bloco-resultado-reserva" aria-live="polite"></div>
+                </form>
+            </section>
+        </div>
+        <div class="mensagem-erro" role="alert"></div>
+
+        <!--Economia Potencial-->
+        <div class="container-activity">
+            <section class="economia-potencial">
+                <h2>Economia Potencial</h2>
+                <form action="" method="post">
+                    <fieldset>
+                        <legend>Saldo mensal</legend>
+                        <label for="saldo-mensal">Saldo mensal:</label>
+                        <input type="number" id="saldo-mensal" name="saldo" step="0.01" min="0.01" placeholder="1500.50" aria-describedby="saldo-ajuda" required/>
+                        <small id="saldo-ajuda">Digite apenas números (ex.: 1500.50)</small>
+                        <button type="submit">Enviar</button>
+                    </fieldset>
+                </form>
+                <div class="mensagem-erro" role="alert"></div>
+                <div class="cards">
+                    <div class="card">
+                        <h3>1 ano</h3>
+                        <p id="resultado-1-ano" aria-live="polite"></p>
+                    </div>
+                    <div class="card">
+                        <h3>2 anos</h3>
+                        <p id="resultado-2-anos" aria-live="polite"></p>
+                    </div>
+                    <div class="card">
+                        <h3>5 anos</h3>
+                        <p id="resultado-5-anos" aria-live="polite"></p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <aside class="chat-ia" aria-labelledby="chat-titulo">
+        <h2 id="chat-titulo">Chat com IA</h2>
+        <p id="chat-ajuda">Em breve: o assistente responderá aqui.</p>
+        <label for="pergunta-chat">Sua pergunta:</label>
+        <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda"></textarea>
+        <button type="button">Enviar</button>
+        <div class="chat-resposta" aria-live="polite">A resposta aparecerá aqui.</div>
+    </aside>
+    <footer>Todos os direitos reservados</footer>
+</body>
+</html>
