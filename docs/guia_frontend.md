@@ -3,9 +3,8 @@
 ## Visão geral
 
 O frontend apresenta as atividades de análise e planejamento financeiro em cinco
-páginas HTML. Nesta etapa, os formulários, resultados, histórico e chat são
-estruturas visuais; a integração com a API e o comportamento dinâmico serão
-implementados posteriormente.
+páginas HTML. O arquivo `frontend/js/app.js` conecta os formulários e o chat à
+API local e carrega o histórico na página de análise.
 
 ## Acessibilidade e apresentação
 
@@ -41,6 +40,7 @@ implementados posteriormente.
 | `frontend/quitacao.html` | Simulação de quitação de dívidas |
 | `frontend/despesas.html` | Análise de despesas |
 | `frontend/css/estilo.css` | Estilos compartilhados |
+| `frontend/js/app.js` | Integração dos formulários, resultados, histórico e chat |
 
 ## Conteúdo atual das páginas
 
@@ -48,7 +48,7 @@ implementados posteriormente.
 
 - Cabeçalho com título à esquerda e links à direita em telas largas.
 - Cards com links descritivos para as quatro atividades.
-- Chat estático com a mensagem “Em breve: o assistente responderá aqui.”
+- Chat conectado ao endpoint `/chat`, com estados de envio e erro.
 
 ### Análise financeira (`analise.html`)
 
@@ -56,7 +56,7 @@ implementados posteriormente.
 - Área acessível para o diagnóstico e região para erros.
 - Seção de histórico com colunas de total de gastos, saldo, percentual e
   diagnóstico, além da mensagem inicial “Nenhuma análise salva ainda.”
-- A consulta ao histórico ainda depende da integração com a API.
+- O histórico é carregado pelo endpoint `GET /historico`.
 
 ### Projeção financeira (`projecao.html`)
 
@@ -67,16 +67,33 @@ implementados posteriormente.
 ### Quitação de dívidas (`quitacao.html`)
 
 - Formulário com valor da dívida e pagamento mensal.
-- Área para resultado e região para mensagens de erro.
+- Tabela com a dívida restante em cada mês e região para mensagens de erro.
 
 ### Análise de despesas (`despesas.html`)
 
 - Formulário atual com cinco campos fixos de despesa.
-- A rota da API recebe uma lista; a adaptação dos campos para esse formato e a
-  inclusão dinâmica de despesas ficam para a integração posterior.
+- Os cinco campos são convertidos em uma lista para o endpoint
+  `POST /analise-despesas`.
 
-## Etapas futuras
+## Integração e erros
 
-Conectar os formulários às rotas da API, preencher os resultados, carregar o
-histórico e implementar o chat. Até lá, os elementos correspondentes são apenas
-estrutura visual, sem comportamento dinâmico.
+- A constante `API_URL`, no início de `frontend/js/app.js`, aponta para
+  `http://127.0.0.1:8000`.
+- As chamadas usam `fetch`, JSON, `response.ok` e tratam falhas de conexão e
+  respostas HTTP, inclusive erros 400, 422 e 502.
+- Os resultados são inseridos com `textContent` e elementos DOM, sem inserir
+  conteúdo da API como HTML.
+- Os formulários e o carregamento do histórico mostram estados de espera.
+- A chave do Gemini permanece no backend.
+
+## Deploy e persistência
+
+A API ainda está documentada como local. Para deploy, atualize `API_URL` e as
+origens CORS conforme os endereços publicados. Um serviço web gratuito do
+Render pode dormir após 15 minutos sem tráfego e leva cerca de um minuto para
+reativar. Seu sistema de arquivos é efêmero, e o plano gratuito não oferece
+disco persistente; portanto, o histórico em `data/dados.json` precisa ser
+substituído por armazenamento durável antes de depender dele em produção.
+
+Consulte as limitações atuais na [documentação do Render sobre o plano gratuito](https://render.com/docs/free)
+e sobre [discos persistentes](https://render.com/docs/disks).

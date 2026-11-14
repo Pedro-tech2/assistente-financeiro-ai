@@ -6,6 +6,7 @@
         <title>Assistente Financeiro</title>
         <!--Aqui fica o link de estilos da página-->
         <link rel="stylesheet" href="css/estilo.css">
+        <script src="js/app.js" defer></script>
     </head>
     <body>
         <header>
@@ -54,10 +55,12 @@
         <aside class="chat-ia" aria-labelledby="chat-titulo">
             <h2 id="chat-titulo">Chat com IA</h2>
             <p id="chat-ajuda">Em breve: o assistente responderá aqui.</p>
-            <label for="pergunta-chat">Sua pergunta:</label>
-            <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda"></textarea>
-            <button type="button">Enviar</button>
-            <div class="chat-resposta" aria-live="polite">A resposta aparecerá aqui.</div>
+            <form action="" method="post" data-api-path="/chat" data-result-id="chat-resposta" data-error-id="chat-resposta">
+                <label for="pergunta-chat">Sua pergunta:</label>
+                <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+            <div class="chat-resposta" id="chat-resposta" role="status" aria-live="polite">A resposta aparecerá aqui.</div>
         </aside>
         <footer>Todos os direitos reservados</footer>
     </body>

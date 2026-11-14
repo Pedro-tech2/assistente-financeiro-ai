@@ -297,13 +297,42 @@ button[type="submit"] {
 }
 
 /* 7. ESTADOS INTERATIVOS */
+a,
+button {
+    transition: color 0.15s ease, background-color 0.15s ease, filter 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+}
+a:active {
+    opacity: 0.75;
+}
+button:hover {
+    filter: brightness(1.1);
+}
+button:active {
+    filter: brightness(0.9);
+    transform: translateY(1px);
+}
+button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+:focus-visible {
+    outline: 3px solid var(--cor-texto-claro);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px var(--cor-primaria);
+}
+input[type="number"]:user-invalid {
+    border-color: var(--cor-erro);
+}
 
 /* 8. RESPONSIVIDADE (media queries) */
-@media (max-width: 640px) {
+@media (max-width: 600px) {
     header {
         align-items: flex-start;
         flex-direction: column;
         padding: 1.25rem 1rem;
+    }
+    header nav {
+        width: 100%;
     }
     header nav ul {
         flex-wrap: wrap;

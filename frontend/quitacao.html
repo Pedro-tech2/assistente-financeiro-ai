@@ -6,6 +6,7 @@
         <title>Quitação de Dívidas</title>
         <!--Aqui fica o link de estilos da página-->
         <link rel="stylesheet" href="css/estilo.css">
+        <script src="js/app.js" defer></script>
     </head>
     <body>
         <header>
@@ -21,7 +22,7 @@
             <div class="container-activity">
                 <section class="atividade">
                     <!--Formulário que recebe dados de dívidas-->
-                    <form action="" method="post">
+                    <form action="" method="post" data-api-path="/quitacao-divida" data-result-id="bloco-resultado-quitacao" data-error-id="erro-quitacao">
                         <fieldset>
                             <legend>Dados sobre Dívidas</legend>
                             <div>
@@ -46,15 +47,17 @@
                     </form>
                 </section>
             </div>
-            <div class="mensagem-erro" role="alert"></div>
+            <div class="mensagem-erro" id="erro-quitacao" role="alert"></div>
         </main>
         <aside class="chat-ia" aria-labelledby="chat-titulo">
             <h2 id="chat-titulo">Chat com IA</h2>
             <p id="chat-ajuda">Em breve: o assistente responderá aqui.</p>
-            <label for="pergunta-chat">Sua pergunta:</label>
-            <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda"></textarea>
-            <button type="button">Enviar</button>
-            <div class="chat-resposta" aria-live="polite">A resposta aparecerá aqui.</div>
+            <form action="" method="post" data-api-path="/chat" data-result-id="chat-resposta" data-error-id="chat-resposta">
+                <label for="pergunta-chat">Sua pergunta:</label>
+                <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+            <div class="chat-resposta" id="chat-resposta" role="status" aria-live="polite">A resposta aparecerá aqui.</div>
         </aside>
         <footer>Todos os direitos reservados</footer>
     </body>

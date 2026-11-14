@@ -6,6 +6,7 @@
     <title>Projeção Financeira</title>
     <!--Aqui fica o link de estilos da página-->
     <link rel="stylesheet" href="css/estilo.css">
+    <script src="js/app.js" defer></script>
 </head>
 <body>
     <header>
@@ -21,7 +22,7 @@
         <div class="container-activity">
             <section class="atividade">
                 <h2>Sua Meta</h2>
-                <form action="" method="post">
+                <form action="" method="post" data-api-path="/meta" data-result-id="bloco-resultado-meta" data-error-id="erro-meta">
                     <fieldset>
                         <legend>Meta Financeira</legend>
                         <div>
@@ -45,18 +46,18 @@
                 </form>
             </section>
         </div>
-        <div class="mensagem-erro" role="alert"></div>
+        <div class="mensagem-erro" id="erro-meta" role="alert"></div>
 
         <!--Reserva de Emergência-->
         <div class="container-activity">
             <section class="atividade">
                 <h2>Reserva de Emergência</h2>
-                <form action="" method="post">
+                <form action="" method="post" data-api-path="/reserva-emergencia" data-result-id="bloco-resultado-reserva" data-error-id="erro-reserva">
                     <fieldset>
                         <legend>Reserva de Emergência</legend>
                         <div>
                             <label for="gastos-fixos">Quais são seus gastos fixos?</label>
-                            <input type="number" id="gastos-fixos" name="gastos_fixos" step="0.01" min="0.01" placeholder="800.00" aria-describedby="gastos-fixos-ajuda" required/>
+                            <input type="number" id="gastos-fixos" name="gastos_fixos" step="0.01" min="0" placeholder="800.00" aria-describedby="gastos-fixos-ajuda" required/>
                             <small id="gastos-fixos-ajuda">
                                 Digite apenas números (ex.: 1500.50)
                             </small>
@@ -67,13 +68,13 @@
                 </form>
             </section>
         </div>
-        <div class="mensagem-erro" role="alert"></div>
+        <div class="mensagem-erro" id="erro-reserva" role="alert"></div>
 
         <!--Economia Potencial-->
         <div class="container-activity">
             <section class="economia-potencial">
                 <h2>Economia Potencial</h2>
-                <form action="" method="post">
+                <form action="" method="post" data-api-path="/economia-potencial" data-error-id="erro-economia" data-status-id="status-economia">
                     <fieldset>
                         <legend>Saldo mensal</legend>
                         <label for="saldo-mensal">Saldo mensal:</label>
@@ -82,7 +83,8 @@
                         <button type="submit">Enviar</button>
                     </fieldset>
                 </form>
-                <div class="mensagem-erro" role="alert"></div>
+                <div class="mensagem-erro" id="erro-economia" role="alert"></div>
+                <p id="status-economia" role="status" aria-live="polite"></p>
                 <div class="cards">
                     <div class="card">
                         <h3>1 ano</h3>
@@ -103,10 +105,12 @@
     <aside class="chat-ia" aria-labelledby="chat-titulo">
         <h2 id="chat-titulo">Chat com IA</h2>
         <p id="chat-ajuda">Em breve: o assistente responderá aqui.</p>
-        <label for="pergunta-chat">Sua pergunta:</label>
-        <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda"></textarea>
-        <button type="button">Enviar</button>
-        <div class="chat-resposta" aria-live="polite">A resposta aparecerá aqui.</div>
+        <form action="" method="post" data-api-path="/chat" data-result-id="chat-resposta" data-error-id="chat-resposta">
+            <label for="pergunta-chat">Sua pergunta:</label>
+            <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda" required></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+        <div class="chat-resposta" id="chat-resposta" role="status" aria-live="polite">A resposta aparecerá aqui.</div>
     </aside>
     <footer>Todos os direitos reservados</footer>
 </body>

@@ -6,6 +6,7 @@
         <title>Análise Financeira</title>
         <!--Aqui fica o link de estilos da página-->
         <link rel="stylesheet" href="css/estilo.css">
+        <script src="js/app.js" defer></script>
     </head>
     <body>
         <header>
@@ -20,7 +21,7 @@
             <div class="container-activity">
                 <section class="atividade">
                     <!--Formulário para entrada de dados de salário, gastos e dívidas-->
-                    <form action="" method="post">
+                    <form action="" method="post" data-api-path="/analise" data-result-id="bloco-diagnostico" data-error-id="erro-analise">
                         <fieldset>
                             <legend>Dados Financeiros</legend>
                             <div>
@@ -52,11 +53,12 @@
                         <div class="resultado" id="bloco-diagnostico" aria-live="polite"></div>
                     </form>
                 </section>
-                <div class="mensagem-erro" role="alert"></div>
+                <div class="mensagem-erro" id="erro-analise" role="alert"></div>
             </div>
             <section class="historico" aria-labelledby="titulo-historico">
                 <h2 id="titulo-historico">Histórico</h2>
                 <p id="historico-vazio" role="status">Nenhuma análise salva ainda.</p>
+                <div class="mensagem-erro" id="erro-historico" role="alert"></div>
                 <table class="tabela">
                     <thead>
                         <tr>
@@ -73,10 +75,12 @@
         <aside class="chat-ia" aria-labelledby="chat-titulo">
             <h2 id="chat-titulo">Chat com IA</h2>
             <p id="chat-ajuda">Em breve: o assistente responderá aqui.</p>
-            <label for="pergunta-chat">Sua pergunta:</label>
-            <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda"></textarea>
-            <button type="button">Enviar</button>
-            <div class="chat-resposta" aria-live="polite">A resposta aparecerá aqui.</div>
+            <form action="" method="post" data-api-path="/chat" data-result-id="chat-resposta" data-error-id="chat-resposta">
+                <label for="pergunta-chat">Sua pergunta:</label>
+                <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+            <div class="chat-resposta" id="chat-resposta" role="status" aria-live="polite">A resposta aparecerá aqui.</div>
         </aside>
         <footer>Todos os direitos reservados</footer>
     </body>
