@@ -1,6 +1,7 @@
 import config 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from ai.gemini_service import gerar_conselho_financeiro
 from core.financeiro import analisar_financas
@@ -132,3 +133,5 @@ def historico():
     Endpoint que retorna todas as análises já salvas.
     """
     return carregar_historico()
+
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
