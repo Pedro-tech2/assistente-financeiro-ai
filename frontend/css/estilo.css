@@ -1,0 +1,355 @@
+/* 1. IMPORTS (fontes externas, se usar) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Doppio+One&display=swap');
+
+/* 2. RESET / NORMALIZAÇÃO */
+* {
+    box-sizing: border-box;
+}
+body, h1, h2, h3, p, ul {
+    margin: 0;
+}
+
+/* 3. VARIÁVEIS (:root) */
+:root{
+    /* cores */
+    --cor-fundo: #F5F6F7;
+    --cor-texto: #1F2A33;
+    --cor-texto-claro: #FFFFFF;
+    --cor-primaria: #0B4F6C;
+    --cor-secundaria: #3E7C89;
+    --cor-erro: #B3261E;
+    --cor-sucesso: #2E7D5B;
+    --cor-link-claro: #DFE9EC;
+
+    /* tipografia */
+    --fonte-titulo: 'Doppio One', sans-serif;
+    --fonte-corpo: 'Inter', sans-serif;
+    --fonte-base: 1rem;
+    --fonte-h1: 2.25rem;
+    --fonte-h2: 1.5rem;
+    --fonte-h3: 1.125rem;
+    --fonte-pequena: 0.875rem;
+
+    /* reutilizáveis*/
+    --raio-padrao: 14px;
+    --sombra-padrao: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 4. ESTILOS GLOBAIS / BASE */
+body {
+    font-family: var(--fonte-corpo);
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+}
+h1, h2, h3 {
+    font-family: var(--fonte-titulo);
+    font-weight: bold;
+}
+h2 {font-size: var(--fonte-h2);}
+h3 {font-size: var(--fonte-h3);}
+p {
+    margin-top: 0.4rem;
+    font-size: var(--fonte-base);
+}
+a {
+    color: var(--cor-primaria);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* 5. LAYOUT MACRO (header, main, footer) */
+header {
+    background: linear-gradient(125deg, var(--cor-primaria), var(--cor-secundaria));
+    box-shadow: var(--sombra-padrao);
+    padding: 1.5rem 2rem;
+    color: var(--cor-texto-claro);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+.main-title {
+    color: var(--cor-texto-claro);
+    font-size: var(--fonte-h1);
+    margin-bottom: 0;
+}
+header nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem;
+}
+header nav a {
+    color: var(--cor-link-claro);
+    font-weight: 600;
+}
+main {
+    max-width: 900px;
+    padding: 2rem 1rem;
+    margin: 0 auto;
+}
+footer {
+    text-align: center;
+    font-size: var(--fonte-pequena);
+    color: var(--cor-texto);
+    padding: 2rem;
+}
+
+/* 6. COMPONENTES */
+
+/* Banner inicial */
+.hero {
+    background: rgba(11, 79, 108, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    border-radius: 1.8rem;
+    box-shadow: var(--sombra-padrao);
+}
+.hero-text {
+    flex: 1;
+}
+.hero-text p {
+    font-size: 1.125rem;
+    text-align: justify;
+}
+.hero img{
+    height: auto;
+    max-width: 320px;
+    border-radius: var(--raio-padrao);
+    width: 100%;
+}
+
+/* Cards */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+.card {
+    background: var(--cor-secundaria);
+    border-radius: var(--raio-padrao);
+    padding: 1.8rem;
+    box-shadow: var(--sombra-padrao);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-top: 4px solid var(--cor-primaria);
+    color: var(--cor-texto-claro);
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+.card h2 {
+    color: var(--cor-texto-claro);
+}
+.card a {
+    color: var(--cor-texto-claro);
+    font-weight: 600;
+}
+
+/* Atividades e formulários */
+.container-activity {
+    margin-top: 2rem;
+    background: #FFFFFF;
+    padding: 1.5rem;
+    border-radius: var(--raio-padrao);
+    box-shadow: var(--sombra-padrao);
+}
+.atividade h2,
+.economia-potencial > h2 {
+    margin-bottom: 1rem;
+}
+.economia-potencial {
+    margin: 0;
+}
+.economia-potencial .cards {
+    margin-top: 1rem;
+}
+fieldset {
+    border: 1px solid var(--cor-secundaria);
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+}
+legend {
+    font-weight: 600;
+    color: var(--cor-primaria);
+    padding: 0 0.5rem;
+}
+form div {
+    margin-bottom: 1rem;
+}
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+input[type="number"] {
+    width: 100%;
+    max-width: 260px;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--cor-secundaria);
+    border-radius: 6px;
+    font-size: var(--fonte-base);
+}
+small {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: var(--fonte-pequena);
+    color: #666;
+}
+button[type="submit"] {
+    background: var(--cor-primaria);
+    color: var(--cor-texto-claro);
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    font-size: var(--fonte-base);
+    cursor: pointer;
+    box-shadow: var(--sombra-padrao);
+    margin-top: 0.6rem;
+}
+
+/* Resultados e mensagens */
+.resultado {
+    border: 1px solid var(--cor-secundaria);
+    border-radius: 10px;
+    padding: 1.2rem;
+}
+.resultado:empty {
+    display: none;
+}
+.mensagem-erro:empty {
+    display: none;
+}
+.mensagem-erro:not(:empty) {
+    margin: 1rem 0;
+    color: var(--cor-erro);
+}
+
+/* Histórico e tabelas */
+.historico {
+    margin: 2rem 0;
+    overflow-x: auto;
+}
+.historico h2 {
+    margin-bottom: 1rem;
+}
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+}
+.tabela th,
+.tabela td {
+    padding: 0.7rem;
+    border: 1px solid var(--cor-secundaria);
+    text-align: left;
+}
+.tabela th {
+    background: var(--cor-link-claro);
+}
+
+/* Chat estático */
+.chat-ia {
+    position: fixed;
+    z-index: 10;
+    right: 1rem;
+    bottom: 1rem;
+    width: 320px;
+    max-width: calc(100vw - 2rem);
+    padding: 1rem;
+    background: #FFFFFF;
+    border: 1px solid var(--cor-secundaria);
+    border-radius: var(--raio-padrao);
+    box-shadow: var(--sombra-padrao);
+}
+.chat-ia h2 {
+    margin-bottom: 0.5rem;
+}
+.chat-ia p {
+    font-size: var(--fonte-pequena);
+}
+.chat-ia textarea {
+    display: block;
+    width: 100%;
+    margin: 0.3rem 0 0.6rem;
+    padding: 0.5rem;
+    border: 1px solid var(--cor-secundaria);
+    border-radius: 6px;
+    font: inherit;
+}
+.chat-ia button {
+    background: var(--cor-primaria);
+    color: var(--cor-texto-claro);
+    border: 0;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+}
+.chat-resposta {
+    margin-top: 0.6rem;
+    font-size: var(--fonte-pequena);
+}
+
+/* 7. ESTADOS INTERATIVOS */
+a,
+button {
+    transition: color 0.15s ease, background-color 0.15s ease, filter 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+}
+a:active {
+    opacity: 0.75;
+}
+button:hover {
+    filter: brightness(1.1);
+}
+button:active {
+    filter: brightness(0.9);
+    transform: translateY(1px);
+}
+button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+:focus-visible {
+    outline: 3px solid var(--cor-texto-claro);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px var(--cor-primaria);
+}
+input[type="number"]:user-invalid {
+    border-color: var(--cor-erro);
+}
+
+/* 8. RESPONSIVIDADE (media queries) */
+@media (max-width: 600px) {
+    header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 1.25rem 1rem;
+    }
+    header nav {
+        width: 100%;
+    }
+    header nav ul {
+        flex-wrap: wrap;
+        gap: 0.75rem 1rem;
+    }
+    .hero {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+    .hero img {
+        max-width: 100%;
+    }
+    .chat-ia {
+        position: static;
+        width: auto;
+        max-width: none;
+        margin: 0 1rem 1rem;
+    }
+}

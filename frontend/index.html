@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Assistente Financeiro</title>
+        <!--Aqui fica o link de estilos da página-->
+        <link rel="stylesheet" href="css/estilo.css">
+        <script src="js/app.js" defer></script>
+    </head>
+    <body>
+        <header>
+            <p class="main-title">Como vão suas finanças?</p>
+            <nav>
+                <ul>
+                    <li><a href="#">Contato</a></li>
+                    <li><a href="#">Perguntas</a></li>
+                    <li><a href="#">Sobre</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="container">
+                <section class="hero">
+                    <div class="hero-text">
+                        <h1>Suas finanças em um só lugar</h1>
+                        <p>Ter uma compreensão de como andam suas finanças é fundamental na hora de tomar uma decisão, não é mesmo? E que tal concentrar suas análises e históricos em um só lugar? Entenda sua situação financeira com clareza e planeje os próximos passos com a ajuda da nossa IA.</p>
+                    </div>
+                    <img src="pictures/celular-financeiro.png" alt="Ilustração de um celular exibindo um aplicativo financeiro">
+                </section>
+                <div class="cards">
+                    <div class="card">
+                        <h2>Análise Financeira</h2>
+                        <p>Faça a sua análise financeira e receba um diagnóstico sobre seu atual status podendo salvar seus dados no histórico</p>
+                        <a href="analise.html">Acessar análise financeira</a>
+                    </div>
+                    <div class="card">
+                        <h2>Projeção Financeira</h2>
+                        <p>Estabeleça metas, crie uma reserva de emergência e avalie ganhos potenciais com base em seu saldo</p>
+                        <a href="projecao.html">Acessar projeção financeira</a>
+                    </div>
+                    <div class="card">
+                        <h2>Simulação de Quitação de Dívidas</h2>
+                        <p>Simule sua dívida e obtenha indicadores de avaliação</p>
+                        <a href="quitacao.html">Acessar simulação de quitação de dívidas</a>
+                    </div>
+                    <div class="card">
+                        <h2>Análise de Despesas</h2>
+                        <p>Liste suas despesas e veja onde seus gastos mais se concentram</p>
+                        <a href="despesas.html">Acessar análise de despesas</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <aside class="chat-ia" aria-labelledby="chat-titulo">
+            <h2 id="chat-titulo">Chat com IA</h2>
+            <p id="chat-ajuda">Em breve: o assistente responderá aqui.</p>
+            <form action="" method="post" data-api-path="/chat" data-result-id="chat-resposta" data-error-id="chat-resposta">
+                <label for="pergunta-chat">Sua pergunta:</label>
+                <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+            <div class="chat-resposta" id="chat-resposta" role="status" aria-live="polite">A resposta aparecerá aqui.</div>
+        </aside>
+        <footer>Todos os direitos reservados</footer>
+    </body>
+</html>

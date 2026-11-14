@@ -1,5 +1,6 @@
 import config 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from ai.gemini_service import gerar_conselho_financeiro
 from core.financeiro import analisar_financas
@@ -7,6 +8,13 @@ from core.calculos import calcular_reserva_emergencia, calcular_meses_para_meta,
 from data.persistencia import salvar_analise, carregar_historico
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500", "http://localhost:5500"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class PerguntaRequest(BaseModel):
     """

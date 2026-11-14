@@ -89,7 +89,30 @@ assistente-financeiro-ai/
    http://127.0.0.1:8000/docs
    ```
 
-Por enquanto o projeto roda só localmente. Colocar no ar (deploy no Render) é o próximo passo.
+Por enquanto o projeto roda só localmente. A interface em `frontend/` pode ser
+aberta pelo Live Server do VS Code na porta 5500; a API deve estar rodando na
+porta 8000. O arquivo `frontend/js/app.js` centraliza a URL da API na constante
+`API_URL`, atualmente configurada para `http://127.0.0.1:8000`.
+
+O backend permite chamadas CORS das origens locais `http://127.0.0.1:5500` e
+`http://localhost:5500`. A interface mostra estados de carregamento e mensagens
+de erro enquanto aguarda a API. A chave do Gemini permanece no `.env` do
+backend e nunca deve ser colocada no JavaScript.
+
+## Considerações para deploy gratuito no Render
+
+De acordo com a [documentação oficial do Render para serviços gratuitos](https://render.com/docs/free),
+um serviço web gratuito suspende a instância após 15 minutos sem tráfego; a
+reativação na próxima chamada costuma levar cerca de um minuto. O sistema de
+arquivos desses serviços é efêmero: alterações locais são perdidas ao suspender,
+reiniciar ou redeployar. Serviços web gratuitos não aceitam discos persistentes,
+portanto o histórico atual em `data/dados.json` não é armazenamento durável para
+deploy.
+
+Antes de publicar com persistência, substitua o JSON por um banco de dados
+adequado. A opção gratuita de Postgres do Render também tem limitações e expira
+após 30 dias, conforme a mesma [documentação de planos gratuitos](https://render.com/docs/free#30-day-limit).
+Consulte também a documentação de [discos persistentes](https://render.com/docs/disks).
 
 ## O que aprendi fazendo esse projeto
 
@@ -101,5 +124,4 @@ Por enquanto o projeto roda só localmente. Colocar no ar (deploy no Render) é 
 ## Próximos passos
 
 - Deploy gratuito no Render
-- Testes automatizados com pytest
-- Front-end simples para consumir a API
+- Substituir o histórico em JSON por armazenamento persistente
