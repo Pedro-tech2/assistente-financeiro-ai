@@ -54,12 +54,12 @@
         <aside class="chat-ia" aria-labelledby="chat-titulo">
             <h2 id="chat-titulo">Chat com IA</h2>
             <p id="chat-ajuda">Tire dúvidas sobre as ferramentas e educação financeira.</p>
+            <div class="chat-conversa" id="chat-conversa" role="log" aria-live="polite" aria-relevant="additions text" aria-label="Histórico da conversa"></div>
             <form action="" method="post" data-api-path="/chat" data-result-id="chat-conversa" data-error-id="chat-erro">
                 <label for="pergunta-chat">Sua pergunta:</label>
                 <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda" required></textarea>
                 <button type="submit">Enviar</button>
             </form>
-            <div class="chat-conversa" id="chat-conversa" role="log" aria-live="polite" aria-relevant="additions text" aria-label="Histórico da conversa"></div>
             <div class="chat-erro mensagem-erro" id="chat-erro" role="alert" aria-live="assertive"></div>
         </aside>
         <footer>Todos os direitos reservados</footer>
