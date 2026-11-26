@@ -8,7 +8,13 @@ const percentFormatter = new Intl.NumberFormat("pt-BR", {
     maximumFractionDigits: 2,
 });
 
-function getElement(id) {
+/**
+ * Obtém um elemento obrigatório da página.
+ * @param {string} id Identificador HTML do elemento.
+ * @returns {HTMLElement} Elemento encontrado.
+ * @throws {Error} Quando o elemento não existe.
+ */
+function obterElemento(id) {
     const element = document.getElementById(id);
     if (!element) {
         throw new Error(`Elemento necessário não encontrado: ${id}`);
@@ -16,7 +22,14 @@ function getElement(id) {
     return element;
 }
 
-function readNumber(form, name) {
+/**
+ * Lê um campo numérico do formulário e valida seu valor.
+ * @param {HTMLFormElement} form Formulário de origem.
+ * @param {string} name Nome do campo.
+ * @returns {number} Valor informado.
+ * @throws {Error} Quando o campo ou valor é inválido.
+ */
+function lerNumero(form, name) {
     const field = form.elements.namedItem(name);
     if (!(field instanceof HTMLInputElement) || !Number.isFinite(field.valueAsNumber)) {
         throw new Error("Confira os valores numéricos informados.");
@@ -24,27 +37,34 @@ function readNumber(form, name) {
     return field.valueAsNumber;
 }
 
-function buildPayload(form, path) {
+/**
+ * Constrói o corpo JSON esperado pela rota associada ao formulário.
+ * @param {HTMLFormElement} form Formulário submetido.
+ * @param {string} path Caminho da API.
+ * @returns {Object} Dados com as chaves do contrato da API.
+ * @throws {Error} Quando os dados ou a rota são inválidos.
+ */
+function montarPayload(form, path) {
     switch (path) {
         case "/analise":
             return {
-                salario: readNumber(form, "salario"),
-                gastos_fixos: readNumber(form, "gastos_fixos"),
-                dividas: readNumber(form, "dividas"),
+                salario: lerNumero(form, "salario"),
+                gastos_fixos: lerNumero(form, "gastos_fixos"),
+                dividas: lerNumero(form, "dividas"),
             };
         case "/meta":
             return {
-                meta: readNumber(form, "meta"),
-                economia_mensal: readNumber(form, "economia_mensal"),
+                meta: lerNumero(form, "meta"),
+                economia_mensal: lerNumero(form, "economia_mensal"),
             };
         case "/reserva-emergencia":
-            return { gastos_fixos: readNumber(form, "gastos_fixos") };
+            return { gastos_fixos: lerNumero(form, "gastos_fixos") };
         case "/economia-potencial":
-            return { saldo: readNumber(form, "saldo") };
+            return { saldo: lerNumero(form, "saldo") };
         case "/quitacao-divida":
             return {
-                dividas: readNumber(form, "dividas"),
-                pagamento_mensal: readNumber(form, "pagamento_mensal"),
+                dividas: lerNumero(form, "dividas"),
+                pagamento_mensal: lerNumero(form, "pagamento_mensal"),
             };
         case "/analise-despesas": {
             const fields = Array.from(form.querySelectorAll('input[name^="despesa-"]'));
@@ -65,7 +85,14 @@ function buildPayload(form, path) {
     }
 }
 
-async function requestJson(path, options = {}) {
+/**
+ * Envia uma requisição à API e valida a resposta JSON e o status HTTP.
+ * @param {string} path Caminho da API.
+ * @param {RequestInit} options Opções do fetch.
+ * @returns {Promise<Object|Array>} Dados decodificados da resposta.
+ * @throws {Error} Em falha de conexão, HTTP ou JSON.
+ */
+async function requisitarJson(path, options = {}) {
     let response;
     try {
         response = await fetch(`${API_URL}${path}`, options);
@@ -90,7 +117,14 @@ async function requestJson(path, options = {}) {
     return data;
 }
 
-function requireNumber(data, key) {
+/**
+ * Valida e obtém uma propriedade numérica de uma resposta da API.
+ * @param {Object} data Resposta recebida.
+ * @param {string} key Nome da propriedade.
+ * @returns {number} Valor numérico validado.
+ * @throws {Error} Quando a propriedade não contém número finito.
+ */
+function exigirNumero(data, key) {
     const value = data && data[key];
     if (typeof value !== "number" || !Number.isFinite(value)) {
         throw new Error("A API retornou um resultado inesperado.");
@@ -98,35 +132,61 @@ function requireNumber(data, key) {
     return value;
 }
 
-function appendValue(parent, label, value) {
+/**
+ * Acrescenta ao elemento um parágrafo textual seguro.
+ * @param {HTMLElement} parent Elemento que receberá o parágrafo.
+ * @param {string} label Rótulo apresentado.
+ * @param {string|number} value Valor apresentado.
+ * @returns {void}
+ */
+function adicionarValor(parent, label, value) {
     const paragraph = document.createElement("p");
     paragraph.textContent = `${label}: ${value}`;
     parent.append(paragraph);
 }
 
-function renderAnalysis(result, data) {
+/**
+ * Apresenta diagnóstico, gastos, saldo e percentual da análise financeira.
+ * @param {HTMLElement} result Região de resultado.
+ * @param {Object} data Resposta da rota /analise.
+ * @returns {void}
+ */
+function renderizarAnalise(result, data) {
     if (!data || typeof data.diagnostico !== "string") {
         throw new Error("A API retornou um diagnóstico inválido.");
     }
     result.replaceChildren();
-    appendValue(result, "Total de gastos", currencyFormatter.format(requireNumber(data, "total_gastos")));
-    appendValue(result, "Saldo", currencyFormatter.format(requireNumber(data, "saldo")));
-    appendValue(result, "Percentual de gastos", `${percentFormatter.format(requireNumber(data, "percentual_gastos"))}%`);
-    appendValue(result, "Diagnóstico", data.diagnostico);
+    adicionarValor(result, "Total de gastos", currencyFormatter.format(exigirNumero(data, "total_gastos")));
+    adicionarValor(result, "Saldo", currencyFormatter.format(exigirNumero(data, "saldo")));
+    adicionarValor(result, "Percentual de gastos", `${percentFormatter.format(exigirNumero(data, "percentual_gastos"))}%`);
+    adicionarValor(result, "Diagnóstico", data.diagnostico);
 }
 
-function renderDebtSchedule(result, data) {
+/**
+ * Renderiza o prazo e a tabela mensal de quitação da dívida.
+ * @param {HTMLElement} result Região de resultado.
+ * @param {Object} data Resposta da rota /quitacao-divida.
+ * @returns {void}
+ * @throws {Error} Quando o histórico retornado é inválido.
+ */
+function renderizarCronogramaDivida(result, data) {
     if (!Array.isArray(data?.historico)) {
         throw new Error("A API retornou um histórico de quitação inválido.");
     }
     result.replaceChildren();
-    appendValue(result, "Meses para quitar", requireNumber(data, "meses_para_quitar"));
+    const scheduleHeading = document.createElement("div");
+    scheduleHeading.className = "cabecalho-cronograma";
+    const monthsText = document.createElement("p");
+    const monthsLabel = document.createElement("strong");
+    monthsLabel.textContent = "Meses para quitar:";
+    monthsText.append(monthsLabel, ` ${exigirNumero(data, "meses_para_quitar")}`);
+    const tableTitle = document.createElement("p");
+    tableTitle.textContent = "Saldo restante por mês";
+    scheduleHeading.append(monthsText, tableTitle);
+    result.append(scheduleHeading);
 
     const table = document.createElement("table");
     table.className = "tabela";
-    const caption = document.createElement("caption");
-    caption.textContent = "Saldo restante por mês";
-    table.append(caption);
 
     const head = document.createElement("thead");
     const headingRow = document.createElement("tr");
@@ -143,9 +203,9 @@ function renderDebtSchedule(result, data) {
     for (const item of data.historico) {
         const row = document.createElement("tr");
         const monthCell = document.createElement("td");
-        monthCell.textContent = String(requireNumber(item, "mes"));
+        monthCell.textContent = String(exigirNumero(item, "mes"));
         const balanceCell = document.createElement("td");
-        balanceCell.textContent = currencyFormatter.format(requireNumber(item, "divida_restante"));
+        balanceCell.textContent = currencyFormatter.format(exigirNumero(item, "divida_restante"));
         row.append(monthCell, balanceCell);
         body.append(row);
     }
@@ -153,7 +213,13 @@ function renderDebtSchedule(result, data) {
     result.append(table);
 }
 
-function renderExpenses(result, data) {
+/**
+ * Apresenta o resumo estatístico das despesas.
+ * @param {HTMLElement} result Região de resultado.
+ * @param {Object} data Resposta da rota /analise-despesas.
+ * @returns {void}
+ */
+function renderizarDespesas(result, data) {
     result.replaceChildren();
     const list = document.createElement("ul");
     for (const [label, key] of [
@@ -163,55 +229,76 @@ function renderExpenses(result, data) {
         ["Média", "media"],
     ]) {
         const item = document.createElement("li");
-        item.textContent = `${label}: ${currencyFormatter.format(requireNumber(data, key))}`;
+        item.textContent = `${label}: ${currencyFormatter.format(exigirNumero(data, key))}`;
         list.append(item);
     }
     result.append(list);
 }
 
-function renderPotentialSavings(data) {
+/**
+ * Atualiza os cards com as projeções de economia para três períodos.
+ * @param {Object} data Resposta da rota /economia-potencial.
+ * @returns {void}
+ */
+function renderizarEconomiaPotencial(data) {
     const results = [
         ["resultado-1-ano", "um_ano"],
         ["resultado-2-anos", "dois_anos"],
         ["resultado-5-anos", "cinco_anos"],
     ];
     for (const [elementId, key] of results) {
-        getElement(elementId).textContent = currencyFormatter.format(requireNumber(data, key));
+        obterElemento(elementId).textContent = currencyFormatter.format(exigirNumero(data, key));
     }
 }
 
-function renderResult(path, result, data) {
+/**
+ * Encaminha cada resposta para sua apresentação específica.
+ * @param {string} path Caminho da API chamado.
+ * @param {HTMLElement} result Região de resultado.
+ * @param {Object} data Dados recebidos.
+ * @returns {void}
+ * @throws {Error} Quando a resposta não corresponde ao contrato esperado.
+ */
+function renderizarResultado(path, result, data) {
     switch (path) {
         case "/analise":
-            renderAnalysis(result, data);
+            renderizarAnalise(result, data);
             break;
         case "/meta":
-            result.textContent = `Você atingirá sua meta em ${requireNumber(data, "meses_para_atingir_meta")} meses.`;
+            result.textContent = `Você atingirá sua meta em ${exigirNumero(data, "meses_para_atingir_meta")} meses.`;
             break;
         case "/reserva-emergencia":
-            result.textContent = `Reserva recomendada: ${currencyFormatter.format(requireNumber(data, "reserva_recomendada"))}.`;
+            result.textContent = `Reserva recomendada: ${currencyFormatter.format(exigirNumero(data, "reserva_recomendada"))}.`;
             break;
         case "/economia-potencial":
-            renderPotentialSavings(data);
+            renderizarEconomiaPotencial(data);
             break;
         case "/quitacao-divida":
-            renderDebtSchedule(result, data);
+            renderizarCronogramaDivida(result, data);
             break;
         case "/analise-despesas":
-            renderExpenses(result, data);
+            renderizarDespesas(result, data);
             break;
         case "/chat":
             if (!data || typeof data.resposta !== "string") {
                 throw new Error("A API retornou uma resposta inválida.");
             }
-            result.textContent = data.resposta;
+            if (result.classList.contains("chat-conversa")) {
+                adicionarMensagemChat(result, "Assistente", data.resposta);
+            } else {
+                result.textContent = data.resposta;
+            }
             break;
         default:
             throw new Error(`Rota da API não reconhecida: ${path}`);
     }
 }
 
-function clearPotentialSavings() {
+/**
+ * Limpa projeções antigas antes de calcular novos valores.
+ * @returns {void}
+ */
+function limparResultadosEconomia() {
     for (const id of ["resultado-1-ano", "resultado-2-anos", "resultado-5-anos"]) {
         const result = document.getElementById(id);
         if (result) {
@@ -220,20 +307,50 @@ function clearPotentialSavings() {
     }
 }
 
-async function handleApiFormSubmit(event) {
+/**
+ * Acrescenta uma mensagem segura ao histórico visual do chat e rola até ela.
+ * @param {HTMLElement} conversa Região que contém as mensagens.
+ * @param {string} remetente Nome exibido para quem enviou a mensagem.
+ * @param {string} texto Conteúdo textual da mensagem.
+ * @returns {HTMLElement} Elemento da mensagem recém-criada.
+ */
+function adicionarMensagemChat(conversa, remetente, texto) {
+    const message = document.createElement("div");
+    const sender = document.createElement("span");
+    const content = document.createElement("p");
+    const isUser = remetente === "Você";
+
+    message.className = `chat-mensagem ${isUser ? "chat-mensagem-usuario" : "chat-mensagem-assistente"}`;
+    sender.className = "chat-remetente";
+    sender.textContent = remetente;
+    content.textContent = texto;
+    message.append(sender, content);
+    conversa.append(message);
+    conversa.scrollTop = conversa.scrollHeight;
+    return message;
+}
+
+/**
+ * Processa o envio de um formulário, exibe estados e apresenta a resposta da API.
+ * @param {SubmitEvent} event Evento de submissão do formulário.
+ * @returns {Promise<void>}
+ */
+async function tratarEnvioFormularioApi(event) {
     event.preventDefault();
     const form = event.currentTarget;
     const path = form.dataset.apiPath;
-    const result = form.dataset.resultId ? getElement(form.dataset.resultId) : null;
-    const error = getElement(form.dataset.errorId);
-    const status = form.dataset.statusId ? getElement(form.dataset.statusId) : null;
+    const result = form.dataset.resultId ? obterElemento(form.dataset.resultId) : null;
+    const error = obterElemento(form.dataset.errorId);
+    const status = form.dataset.statusId ? obterElemento(form.dataset.statusId) : null;
     const submitButton = form.querySelector('button[type="submit"]');
+    const isConversation = path === "/chat" && result?.classList.contains("chat-conversa");
+    let loadingMessage = null;
 
     error.textContent = "";
     if (path === "/economia-potencial") {
-        clearPotentialSavings();
+        limparResultadosEconomia();
     }
-    if (result) {
+    if (result && !isConversation) {
         result.replaceChildren();
         result.textContent = path === "/chat" ? "Enviando pergunta..." : "Calculando...";
     }
@@ -246,21 +363,32 @@ async function handleApiFormSubmit(event) {
     }
 
     try {
-        const payload = buildPayload(form, path);
-        const data = await requestJson(path, {
+        const payload = montarPayload(form, path);
+        if (isConversation) {
+            adicionarMensagemChat(result, "Você", payload.pergunta);
+            loadingMessage = adicionarMensagemChat(result, "Assistente", "Pensando...");
+            loadingMessage.classList.add("chat-mensagem-carregando");
+        }
+        const data = await requisitarJson(path, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
         });
-        if (result) {
+        if (loadingMessage) {
+            loadingMessage.remove();
+        }
+        if (result && !isConversation) {
             result.replaceChildren();
         }
-        renderResult(path, result, data);
+        renderizarResultado(path, result, data);
         if (status) {
             status.textContent = "Projeção calculada.";
         }
     } catch (caught) {
-        if (result && result !== error) {
+        if (loadingMessage) {
+            loadingMessage.remove();
+        }
+        if (result && result !== error && !isConversation) {
             result.replaceChildren();
         }
         const message = caught instanceof Error ? caught.message : "Ocorreu um erro inesperado.";
@@ -276,15 +404,22 @@ async function handleApiFormSubmit(event) {
     }
 }
 
-function appendHistoryRow(body, entry) {
+/**
+ * Adiciona uma análise salva como linha da tabela de histórico.
+ * @param {HTMLElement} body Corpo da tabela.
+ * @param {Object} entry Registro recebido da API.
+ * @returns {void}
+ * @throws {Error} Quando o registro não tem o formato esperado.
+ */
+function adicionarLinhaHistorico(body, entry) {
     if (!entry || typeof entry.diagnostico !== "string") {
         throw new Error("A API retornou um item de histórico inválido.");
     }
     const row = document.createElement("tr");
     const values = [
-        currencyFormatter.format(requireNumber(entry, "total_gastos")),
-        currencyFormatter.format(requireNumber(entry, "saldo")),
-        `${percentFormatter.format(requireNumber(entry, "percentual_gastos"))}%`,
+        currencyFormatter.format(exigirNumero(entry, "total_gastos")),
+        currencyFormatter.format(exigirNumero(entry, "saldo")),
+        `${percentFormatter.format(exigirNumero(entry, "percentual_gastos"))}%`,
         entry.diagnostico,
     ];
     for (const value of values) {
@@ -295,22 +430,26 @@ function appendHistoryRow(body, entry) {
     body.append(row);
 }
 
-async function loadHistory() {
-    const body = getElement("historico-corpo");
-    const emptyMessage = getElement("historico-vazio");
-    const error = getElement("erro-historico");
+/**
+ * Busca e exibe o histórico de análises financeiras.
+ * @returns {Promise<void>}
+ */
+async function carregarHistorico() {
+    const body = obterElemento("historico-corpo");
+    const emptyMessage = obterElemento("historico-vazio");
+    const error = obterElemento("erro-historico");
     emptyMessage.textContent = "Carregando histórico...";
     emptyMessage.hidden = false;
     error.textContent = "";
 
     try {
-        const entries = await requestJson("/historico");
+        const entries = await requisitarJson("/historico");
         if (!Array.isArray(entries)) {
             throw new Error("A API retornou um histórico inválido.");
         }
         body.replaceChildren();
         for (const entry of entries) {
-            appendHistoryRow(body, entry);
+            adicionarLinhaHistorico(body, entry);
         }
         emptyMessage.hidden = entries.length > 0;
         emptyMessage.textContent = entries.length > 0 ? "" : "Nenhuma análise salva ainda.";
@@ -322,9 +461,9 @@ async function loadHistory() {
 }
 
 for (const form of document.querySelectorAll("form[data-api-path]")) {
-    form.addEventListener("submit", handleApiFormSubmit);
+    form.addEventListener("submit", tratarEnvioFormularioApi);
 }
 
 if (document.getElementById("historico-corpo")) {
-    loadHistory();
+    carregarHistorico();
 }
