@@ -313,11 +313,14 @@ button[type="submit"] {
     bottom: 1rem;
     width: 320px;
     max-width: calc(100vw - 2rem);
+    max-height: min(70vh, 560px);
     padding: 1rem;
     background: #FFFFFF;
     border: 1px solid var(--cor-secundaria);
     border-radius: var(--raio-padrao);
     box-shadow: var(--sombra-padrao);
+    display: flex;
+    flex-direction: column;
 }
 .chat-ia h2 {
     margin-bottom: 0.5rem;
@@ -349,6 +352,8 @@ button[type="submit"] {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    flex: 1 1 auto;
+    min-height: 0;
     max-height: 220px;
     overflow-y: auto;
     margin-top: 0.75rem;
@@ -357,6 +362,9 @@ button[type="submit"] {
 }
 .chat-conversa:empty {
     display: none;
+}
+.chat-ia form {
+    flex: 0 0 auto;
 }
 .chat-mensagem {
     width: fit-content;
