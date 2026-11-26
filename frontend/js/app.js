@@ -368,6 +368,9 @@ async function tratarEnvioFormularioApi(event) {
             adicionarMensagemChat(result, "Você", payload.pergunta);
             loadingMessage = adicionarMensagemChat(result, "Assistente", "Pensando...");
             loadingMessage.classList.add("chat-mensagem-carregando");
+            const questionField = form.elements.namedItem("pergunta");
+            questionField.value = "";
+            questionField.focus();
         }
         const data = await requisitarJson(path, {
             method: "POST",
@@ -462,6 +465,22 @@ async function carregarHistorico() {
 
 for (const form of document.querySelectorAll("form[data-api-path]")) {
     form.addEventListener("submit", tratarEnvioFormularioApi);
+
+    if (form.dataset.apiPath === "/chat") {
+        const questionField = form.elements.namedItem("pergunta");
+        questionField.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter" || event.shiftKey || event.isComposing) {
+                return;
+            }
+
+            event.preventDefault();
+            if (!questionField.value.trim() || form.getAttribute("aria-busy") === "true") {
+                return;
+            }
+
+            form.requestSubmit();
+        });
+    }
 }
 
 if (document.getElementById("historico-corpo")) {
