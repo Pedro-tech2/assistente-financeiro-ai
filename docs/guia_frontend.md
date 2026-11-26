@@ -2,9 +2,11 @@
 
 ## Visão geral
 
-O frontend apresenta as atividades de análise e planejamento financeiro em cinco
-páginas HTML. O arquivo `frontend/js/app.js` conecta os formulários e o chat à
-API local e carrega o histórico na página de análise.
+O frontend apresenta as atividades de análise e planejamento financeiro em
+cinco páginas HTML, além das páginas informativas de perguntas frequentes e
+sobre o projeto. O arquivo `frontend/js/app.js` conecta os formulários e o chat
+à API e carrega o histórico na página de análise. O FastAPI serve os arquivos
+do frontend na mesma origem da API.
 
 ## Acessibilidade e apresentação
 
@@ -14,8 +16,11 @@ API local e carrega o histórico na página de análise.
 - Imagens informativas devem ter texto alternativo.
 - Resultados e mensagens devem usar regiões acessíveis quando forem preenchidos.
 - O layout do cabeçalho é horizontal em telas largas e empilhado em telas estreitas.
-- O chat aparece em todas as páginas. Em telas pequenas, fica no fluxo normal da
-  página para não cobrir o conteúdo.
+- O chat aparece nas páginas das atividades. Em telas pequenas, fica no fluxo
+  normal da página para não cobrir o conteúdo.
+- A página inicial exibe quatro cards em duas colunas; em smartphones, os cards
+  ficam em uma coluna.
+- As páginas Perguntas e Sobre estão disponíveis em `/perguntas` e `/sobre`.
 
 ## Funcionalidades e contrato da API
 
@@ -39,6 +44,8 @@ API local e carrega o histórico na página de análise.
 | `frontend/projecao.html` | Meta, reserva de emergência e economia potencial |
 | `frontend/quitacao.html` | Simulação de quitação de dívidas |
 | `frontend/despesas.html` | Análise de despesas |
+| `frontend/perguntas.html` | Respostas às perguntas frequentes |
+| `frontend/sobre.html` | Contexto e objetivo do projeto |
 | `frontend/css/estilo.css` | Estilos compartilhados |
 | `frontend/js/app.js` | Integração dos formulários, resultados, histórico e chat |
 
@@ -47,8 +54,20 @@ API local e carrega o histórico na página de análise.
 ### Página inicial (`index.html`)
 
 - Cabeçalho com título à esquerda e links à direita em telas largas.
-- Cards com links descritivos para as quatro atividades.
+- Cards em duas colunas com links descritivos para as quatro atividades e uma
+  coluna em telas de até 600px.
 - Chat conectado ao endpoint `/chat`, com estados de envio e erro.
+- No início, o chat acumula mensagens em balões distintos durante a conversa
+  aberta e rola até a mensagem mais recente.
+- O backend instrui o Gemini a orientar sobre as ferramentas do site e educação
+  financeira geral, sem solicitar links externos.
+
+### Perguntas frequentes (`perguntas.html`) e Sobre (`sobre.html`)
+
+- Páginas informativas acessíveis pelas rotas `/perguntas` e `/sobre`.
+- Perguntas em elementos expansíveis acessíveis por teclado.
+- A apresentação explica a origem do projeto, suas funcionalidades e seu
+  caráter educacional, sem tratar as estimativas como aconselhamento profissional.
 
 ### Análise financeira (`analise.html`)
 
@@ -77,8 +96,8 @@ API local e carrega o histórico na página de análise.
 
 ## Integração e erros
 
-- A constante `API_URL`, no início de `frontend/js/app.js`, aponta para
-  `http://127.0.0.1:8000`.
+- A constante `API_URL`, no início de `frontend/js/app.js`, usa
+  `window.location.origin`; o frontend é servido pelo próprio FastAPI.
 - As chamadas usam `fetch`, JSON, `response.ok` e tratam falhas de conexão e
   respostas HTTP, inclusive erros 400, 422 e 502.
 - Os resultados são inseridos com `textContent` e elementos DOM, sem inserir
@@ -88,9 +107,9 @@ API local e carrega o histórico na página de análise.
 
 ## Deploy e persistência
 
-A API ainda está documentada como local. Para deploy, atualize `API_URL` e as
-origens CORS conforme os endereços publicados. Um serviço web gratuito do
-Render pode dormir após 15 minutos sem tráfego e leva cerca de um minuto para
+A aplicação pode ser testada localmente abrindo `http://127.0.0.1:8000/` após
+iniciar o Uvicorn. Um serviço web gratuito do Render pode dormir após 15 minutos
+sem tráfego e levar cerca de um minuto para
 reativar. Seu sistema de arquivos é efêmero, e o plano gratuito não oferece
 disco persistente; portanto, o histórico em `data/dados.json` precisa ser
 substituído por armazenamento durável antes de depender dele em produção.
