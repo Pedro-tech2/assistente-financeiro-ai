@@ -13,9 +13,8 @@
             <p class="main-title">Como vão suas finanças?</p>
             <nav>
                 <ul>
-                    <li><a href="#">Contato</a></li>
-                    <li><a href="#">Perguntas</a></li>
-                    <li><a href="#">Sobre</a></li>
+                    <li><a href="/perguntas">Perguntas</a></li>
+                    <li><a href="/sobre">Sobre</a></li>
                 </ul>
             </nav>
         </header>
@@ -28,7 +27,7 @@
                     </div>
                     <img src="pictures/celular-financeiro.png" alt="Ilustração de um celular exibindo um aplicativo financeiro">
                 </section>
-                <div class="cards">
+                <div class="cards cards-inicio">
                     <div class="card">
                         <h2>Análise Financeira</h2>
                         <p>Faça a sua análise financeira e receba um diagnóstico sobre seu atual status podendo salvar seus dados no histórico</p>
@@ -54,13 +53,14 @@
         </main>
         <aside class="chat-ia" aria-labelledby="chat-titulo">
             <h2 id="chat-titulo">Chat com IA</h2>
-            <p id="chat-ajuda">Em breve: o assistente responderá aqui.</p>
-            <form action="" method="post" data-api-path="/chat" data-result-id="chat-resposta" data-error-id="chat-resposta">
+            <p id="chat-ajuda">Tire dúvidas sobre as ferramentas e educação financeira.</p>
+            <form action="" method="post" data-api-path="/chat" data-result-id="chat-conversa" data-error-id="chat-erro">
                 <label for="pergunta-chat">Sua pergunta:</label>
                 <textarea id="pergunta-chat" name="pergunta" rows="2" placeholder="Digite sua pergunta" aria-describedby="chat-ajuda" required></textarea>
                 <button type="submit">Enviar</button>
             </form>
-            <div class="chat-resposta" id="chat-resposta" role="status" aria-live="polite">A resposta aparecerá aqui.</div>
+            <div class="chat-conversa" id="chat-conversa" role="log" aria-live="polite" aria-relevant="additions text" aria-label="Histórico da conversa"></div>
+            <div class="chat-erro mensagem-erro" id="chat-erro" role="alert" aria-live="assertive"></div>
         </aside>
         <footer>Todos os direitos reservados</footer>
     </body>

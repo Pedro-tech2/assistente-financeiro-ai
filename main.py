@@ -1,5 +1,7 @@
 import config 
+from pathlib import Path
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -134,4 +136,14 @@ def historico():
     """
     return carregar_historico()
 
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+FRONTEND_DIR = Path(__file__).resolve().parent / "frontend"
+
+@app.get("/perguntas", include_in_schema=False)
+def pagina_perguntas():
+    return FileResponse(FRONTEND_DIR / "perguntas.html")
+
+@app.get("/sobre", include_in_schema=False)
+def pagina_sobre():
+    return FileResponse(FRONTEND_DIR / "sobre.html")
+
+app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
